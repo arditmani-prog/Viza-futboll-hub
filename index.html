@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Match Tagger & Video Analytics | Viza Futboll Hub</title>
+    <title>Pro Match Tagger & Studio | Viza Futboll Hub</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -37,6 +37,8 @@
             border-radius: 10px;
             margin-bottom: 15px;
             border-bottom: 3px solid var(--accent);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .timer-box { text-align: center; }
@@ -57,13 +59,20 @@
             font-size: 0.8rem;
         }
 
+        .btn-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
         .btn {
-            padding: 8px 14px;
+            padding: 8px 12px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
+            font-size: 0.85rem;
         }
         .btn:hover { opacity: 0.85; transform: scale(0.98); }
         .btn-green { background: var(--green); color: white; }
@@ -140,27 +149,29 @@
         .video-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            height: 340px;
             background: #000;
             border-radius: 8px;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .video-container iframe, .video-container video {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             border: none;
+            object-fit: contain;
         }
 
         .video-controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             background: var(--card-bg);
             padding: 8px;
             border-radius: 6px;
+            flex-wrap: wrap;
         }
 
         /* DY FUSHAT E VOGLA TAKTIKE (HOME & AWAY) */
@@ -324,7 +335,7 @@
 </head>
 <body>
 
-    <!-- KRONOMETRI DHE KONTROLLET -->
+    <!-- KRONOMETRI DHE KONTROLLET E RIPËRDITËSUARA -->
     <div class="header">
         <div>
             <h2 style="margin:0;">Pro Match Tagger & Studio</h2>
@@ -334,11 +345,12 @@
             <span class="period-badge" id="periodDisplay">Pjesa 1</span>
             <div class="timer-display" id="timer">00:00</div>
         </div>
-        <div>
+        <div class="btn-group">
             <button class="btn btn-green" onclick="startTimer()">Start</button>
             <button class="btn btn-gold" onclick="pauseTimer()">Pause</button>
-            <button class="btn btn-accent" onclick="nextPeriod()">Pjesa Tjetër</button>
-            <button class="btn btn-red" onclick="resetAll()">Reset</button>
+            <button class="btn btn-accent" onclick="endFirstHalf()">Mbyllet Pjesa e Parë</button>
+            <button class="btn btn-red" onclick="endMatch()">Mbaron Ndeshja</button>
+            <button class="btn btn-gold" style="background:#4b5563;" onclick="resetAll()">Reset</button>
         </div>
     </div>
 
@@ -360,21 +372,27 @@
         </div>
     </div>
 
-    <!-- SEKSHONI I STUDIOS: VIDEO LIVE + FUSHAT ME LOJTARË -->
+    <!-- STUDIO GRID: VIDEO PLAYER ME OPCIONE TË PLOTA + FUSHAT E LOJTARËVE -->
     <div class="studio-grid">
         
-        <!-- VIDEO PLAYER-I LIVE -->
+        <!-- VIDEO PLAYER-I MESHUMË MOShI DHE NGARKIM SKEDARI -->
         <div class="video-box">
-            <div class="section-title" style="margin:0;">🎥 Ndeshja Live / Video Stream</div>
+            <div class="section-title" style="margin:0;">🎥 Player Video Ndeshjeje</div>
             
             <div class="video-controls">
-                <input type="text" id="videoUrlInput" placeholder="Vendosni Link-un e YouTube apo Stream-it Direct (rtmp/mp4)">
-                <button class="btn btn-accent" onclick="loadVideo()">Lidhe Video-n</button>
+                <input type="text" id="videoUrlInput" style="flex:2;" placeholder="Vendos URL (YouTube / Stream Direct / MP4)">
+                <button class="btn btn-accent" onclick="loadVideoUrl()">Lidhe Link-un</button>
+                <label class="btn btn-gold" style="cursor:pointer; display:inline-block;">
+                    📂 Ngarko Video MP4
+                    <input type="file" id="videoFileInput" accept="video/*" style="display:none;" onchange="loadLocalVideo(event)">
+                </label>
             </div>
 
             <div class="video-container" id="videoWrapper">
-                <!-- Video Player i paracaktuar (YouTube Embed Demo) -->
-                <iframe id="mainVideoPlayer" src="https://www.youtube.com/embed/live_stream?channel=EXPLORE" allowfullscreen></iframe>
+                <video id="localVideoPlayer" controls style="width:100%; height:100%;">
+                    <source src="" type="video/mp4">
+                    Browseri juaj nuk e mbështet këtë element videoje.
+                </video>
             </div>
         </div>
 
@@ -407,15 +425,21 @@
                     <label>Lojtari i Dytë (Tek/Pritës):</label>
                     <input type="text" id="receiverInput" placeholder="P.sh. Nr. 9">
                 </div>
+                <!-- HEQUR ZONAT -> SHTUAR POZICIONET SIPAS MODULIT TAKTIK -->
                 <div>
-                    <label>Zona e Fushës:</label>
-                    <select id="zoneInput">
-                        <option value="1/3 Mbrojtje (Zone A)">1/3 Mbrojtje (Zone A)</option>
-                        <option value="1/3 Mesfushë (Zone B)">1/3 Mesfushë (Zone B)</option>
-                        <option value="1/3 Sulm (Zone C)">1/3 Sulm (Zone C)</option>
-                        <option value="Krahi i Majtë">Krahi i Majtë</option>
-                        <option value="Krahi i Djathtë">Krahu i Djathtë</option>
-                        <option value="Zonë 16-she">Zonë 16-she</option>
+                    <label>Pozicioni (Moduli):</label>
+                    <select id="positionInput">
+                        <option value="Portier (GK)">Portier (GK)</option>
+                        <option value="Mbrojtës Qendre (CB)">Mbrojtës Qendre (CB)</option>
+                        <option value="Mbrojtës i Majtë (LB)">Mbrojtës i Majtë (LB)</option>
+                        <option value="Mbrojtës i Djathtë (RB)">Mbrojtës i Djathtë (RB)</option>
+                        <option value="Piston / Wingback (LWB/RWB)">Piston / Wingback (LWB/RWB)</option>
+                        <option value="Mesfushor Mbrojtës (CDM)">Mesfushor Mbrojtës (CDM)</option>
+                        <option value="Mesfushor Qendre (CM)">Mesfushor Qendre (CM)</option>
+                        <option value="Mesfushor Sulmues (CAM)">Mesfushor Sulmues (CAM)</option>
+                        <option value="Sulmues Krahu Majtë (LW)">Sulmues Krahu Majtë (LW)</option>
+                        <option value="Sulmues Krahu Djathtë (RW)">Sulmues Krahu Djathtë (RW)</option>
+                        <option value="Qendërsulmues (ST/CF)">Qendërsulmues (ST/CF)</option>
                     </select>
                 </div>
                 <div>
@@ -505,7 +529,7 @@
                             <th>Koha</th>
                             <th>Lojtari (Nga->Tek)</th>
                             <th>Ngjarja</th>
-                            <th>Zona / Tipi</th>
+                            <th>Pozicioni / Tipi</th>
                             <th>Statusi</th>
                         </tr>
                     </thead>
@@ -525,8 +549,8 @@
     </div>
 
     <script>
-        // FUNKSIONI I NDIREKT I LOAD-IMIT TË VIDEOS
-        function loadVideo() {
+        // KONTROLLET E VIDEOS
+        function loadVideoUrl() {
             let url = document.getElementById('videoUrlInput').value.trim();
             let wrapper = document.getElementById('videoWrapper');
 
@@ -535,7 +559,6 @@
                 return;
             }
 
-            // Përpunimi i Link-eve të YouTube (përfshirë watch?v= ose shorts ose live)
             if (url.includes('youtube.com') || url.includes('youtu.be')) {
                 let videoId = "";
                 if (url.includes('v=')) {
@@ -543,14 +566,18 @@
                 } else if (url.includes('youtu.be/')) {
                     videoId = url.split('youtu.be/')[1].split('?')[0];
                 }
-                if (videoId) {
-                    wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                } else {
-                    wrapper.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
-                }
+                wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%;"></iframe>`;
             } else {
-                // Skedar lokal video apo HTML5 stream direct
                 wrapper.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${url}" type="video/mp4">Browseri juaj nuk e mbështet këtë format videoje.</video>`;
+            }
+        }
+
+        function loadLocalVideo(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let wrapper = document.getElementById('videoWrapper');
+                let fileURL = URL.createObjectURL(file);
+                wrapper.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${fileURL}" type="${file.type}">Browseri juaj nuk e mbështet këtë skedar.</video>`;
             }
         }
 
@@ -656,9 +683,20 @@
             timerInterval = null;
         }
 
-        function nextPeriod() {
-            currentPeriod++;
-            document.getElementById('periodDisplay').innerText = "Pjesa " + currentPeriod;
+        // FUNKSIONET E REJA TË BUTONAVE TË KOHËS
+        function endFirstHalf() {
+            pauseTimer();
+            currentPeriod = 2;
+            document.getElementById('periodDisplay').innerText = "Pjesa 2";
+            setPossession('none', 'Ndërprerje');
+            alert("Mbyllet Pjesa e Parë! Kohëmatësi u ndalua.");
+        }
+
+        function endMatch() {
+            pauseTimer();
+            setPossession('none', 'Ndërprerje');
+            document.getElementById('periodDisplay').innerText = "Përfunduar";
+            alert("Përfundoi Ndeshja! Mund të eksportoni raportet përfundimtare.");
         }
 
         function resetAll() {
@@ -668,11 +706,13 @@
                 ourPossSeconds = 0;
                 oppPossSeconds = 0;
                 deadTimeSeconds = 0;
+                currentPeriod = 1;
                 currentPossession = 'none';
                 currentActivePlayerKey = null;
                 logs = [];
                 totalShots = 0; keyPasses = 0; duelsWon = 0; duelsTotal = 0; turnovers = 0;
                 
+                document.getElementById('periodDisplay').innerText = "Pjesa 1";
                 initMiniPitches();
                 updateTimerDisplay();
                 updatePossessionDisplay();
@@ -743,7 +783,7 @@
             let p2 = document.getElementById('receiverInput').value;
             let playerFull = p2 ? `${p1} ➔ ${p2}` : p1;
 
-            let zone = document.getElementById('zoneInput').value;
+            let position = document.getElementById('positionInput').value;
             let intensity = document.getElementById('intensityInput').value;
             let outcome = document.getElementById('outcomeInput').value;
 
@@ -754,7 +794,7 @@
                 player: playerFull,
                 event: eventName,
                 category: category,
-                zone: `${zone} (${intensity})`,
+                position: `${position} (${intensity})`,
                 outcome: outcome,
                 possessionPctAtTime: document.getElementById('ourPossPct').innerText
             };
@@ -793,7 +833,7 @@
                     <td><strong>${log.timestamp}</strong> (${log.period})</td>
                     <td>${log.player}</td>
                     <td>${log.event}</td>
-                    <td>${log.zone}</td>
+                    <td>${log.position}</td>
                     <td style="color:${isPos ? '#22c55e' : '#ef4444'}">${log.outcome}</td>
                 </tr>`;
                 tbody.innerHTML += row;
@@ -805,9 +845,9 @@
         function exportCSV() {
             if (logs.length === 0) { alert("Nuk ka të dhëna për të eksportuar!"); return; }
             
-            let csv = "Pjesa,Koha,Sekonda,Lojtari_Nga_Tek,Ngjarja,Kategoria,Zona_Intensiteti,Vleresimi,Posedimi_Ekipe\n";
+            let csv = "Pjesa,Koha,Sekonda,Lojtari_Nga_Tek,Ngjarja,Kategoria,Pozicioni_Intensiteti,Vleresimi,Posedimi_Ekipe\n";
             logs.forEach(l => {
-                csv += `"${l.period}","${l.timestamp}","${l.seconds}","${l.player}","${l.event}","${l.category}","${l.zone}","${l.outcome}","${l.possessionPctAtTime}"\n`;
+                csv += `"${l.period}","${l.timestamp}","${l.seconds}","${l.player}","${l.event}","${l.category}","${l.position}","${l.outcome}","${l.possessionPctAtTime}"\n`;
             });
 
             let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
