@@ -16,7 +16,6 @@
             --gold: #f59e0b;
             --text: #f9fafb;
             --border: #374151;
-            --pitch-green: #15803d;
         }
 
         body {
@@ -80,51 +79,7 @@
         .btn-gold { background: var(--gold); color: white; }
         .btn-accent { background: var(--accent); color: #000; }
 
-        /* PANELI I POSEDIMIT TË TOPIT */
-        .possession-bar-container {
-            background: var(--panel-bg);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-        }
-
-        .possession-headers {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .progress-bar-wrap {
-            height: 22px;
-            background: #4b5563;
-            border-radius: 11px;
-            overflow: hidden;
-            display: flex;
-        }
-
-        .progress-team { background: var(--accent); height: 100%; transition: width 0.4s ease; }
-        .progress-opp { background: var(--red); height: 100%; transition: width 0.4s ease; }
-
-        .possession-btns {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .pos-btn {
-            padding: 10px;
-            font-weight: bold;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            color: white;
-        }
-
-        /* STRUKTURA STUDIO: VIDEO MAJTAS, ANALIZA DJATHTAS */
+        /* STUDIO LAYOUT: VIDEO HAPËSIRA */
         .studio-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
@@ -149,7 +104,7 @@
         .video-container {
             position: relative;
             width: 100%;
-            height: 340px;
+            height: 320px;
             background: #000;
             border-radius: 8px;
             overflow: hidden;
@@ -158,11 +113,10 @@
             justify-content: center;
         }
 
-        .video-container iframe, .video-container video {
+        .video-container video, .video-container iframe {
             width: 100%;
             height: 100%;
             border: none;
-            object-fit: contain;
         }
 
         .video-controls {
@@ -174,66 +128,103 @@
             flex-wrap: wrap;
         }
 
-        /* DY FUSHAT E VOGLA TAKTIKE (HOME & AWAY) */
+        /* POSEDIMI TË TOPIT */
+        .possession-bar-container {
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .possession-headers {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-wrap {
+            height: 20px;
+            background: #4b5563;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .progress-team { background: var(--accent); height: 100%; transition: width 0.3s; }
+        .progress-opp { background: var(--red); height: 100%; transition: width 0.3s; }
+
+        .possession-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .pos-btn {
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            color: white;
+        }
+
+        /* FUSHAT TAKTIKE TË LOJTARËVE */
         .pitches-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 10px;
         }
 
         .mini-pitch {
             background: radial-gradient(circle, #166534 0%, #052e16 100%);
             border: 2px solid #22c55e;
             border-radius: 10px;
-            padding: 12px;
-            position: relative;
+            padding: 10px;
         }
 
         .pitch-title {
             text-align: center;
             font-weight: bold;
             color: #ffffff;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .players-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            gap: 6px;
         }
 
         .player-node {
             background: rgba(15, 23, 42, 0.85);
             border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 6px;
+            border-radius: 6px;
+            padding: 5px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
 
-        .player-node:hover {
-            background: var(--accent);
-            color: #000;
-        }
-
+        .player-node:hover { background: var(--accent); color: #000; }
         .player-node.active-possession {
             background: var(--gold) !important;
             color: #000 !important;
             font-weight: bold;
-            box-shadow: 0 0 10px var(--gold);
         }
 
-        .player-num { font-size: 1.1rem; font-weight: 800; }
-        .player-stats { font-size: 0.7rem; margin-top: 2px; color: #cbd5e1; }
+        .player-num { font-size: 1rem; font-weight: bold; }
+        .player-stats { font-size: 0.65rem; color: #cbd5e1; }
 
         /* STRUKTURA KRYESORE */
         .main-grid {
             display: grid;
-            grid-template-columns: 2.2fr 1fr;
+            grid-template-columns: 2fr 1fr;
             gap: 15px;
         }
 
@@ -249,19 +240,18 @@
         }
 
         .section-title {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             color: var(--accent);
-            margin: 12px 0 8px 0;
+            margin: 10px 0 6px 0;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .inputs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 12px;
             background: var(--card-bg);
             padding: 10px;
             border-radius: 8px;
@@ -277,10 +267,9 @@
             box-sizing: border-box;
         }
 
-        /* TAGGING BUTTONS */
         .tag-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 8px;
         }
 
@@ -288,12 +277,12 @@
             background: var(--card-bg);
             color: var(--text);
             border: 1px solid var(--border);
-            padding: 12px 6px;
+            padding: 10px 5px;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .tag-btn:hover { border-color: var(--accent); background: #374151; }
@@ -302,44 +291,25 @@
         .tag-trans { border-left: 4px solid var(--gold); }
         .tag-set { border-left: 4px solid var(--green); }
 
-        /* DASHBOARD STATISTIKASH LIVE */
-        .stats-summary {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            padding: 10px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .stat-card .val { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
-        .stat-card .lbl { font-size: 0.75rem; color: #9ca3af; }
-
-        /* TABELA E LOG-UVE */
         .table-wrap {
-            max-height: 380px;
+            max-height: 350px;
             overflow-y: auto;
             border: 1px solid var(--border);
             border-radius: 6px;
         }
 
         table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        th, td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+        th, td { padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
         th { background: var(--card-bg); color: var(--accent); position: sticky; top: 0; }
     </style>
 </head>
 <body>
 
-    <!-- KRONOMETRI DHE KONTROLLET E RIPËRDITËSUARA -->
+    <!-- HEADER / KOHËMATËSI DHE BUTONAT E REJ TË SHTUAR -->
     <div class="header">
         <div>
             <h2 style="margin:0;">Pro Match Tagger & Studio</h2>
-            <small style="color:#9ca3af;">Analizë Video Live, Posedim & Tagging Taktik</small>
+            <small style="color:#9ca3af;">Analizë Video Live & Tagging Taktik</small>
         </div>
         <div class="timer-box">
             <span class="period-badge" id="periodDisplay">Pjesa 1</span>
@@ -354,101 +324,82 @@
         </div>
     </div>
 
-    <!-- PANEL-I I POSEDIMIT TË TOPIT -->
+    <!-- POSEDIMI TË TOPIT -->
     <div class="possession-bar-container">
         <div class="possession-headers">
-            <div>Ekipi Shtëpisë: <span id="ourPossPct">50%</span> (<span id="ourPossTime">00:00</span>)</div>
-            <div style="color:#9ca3af; font-size:0.85rem;">KOHA EFEKTIVE: <span id="effectiveTimeDisplay" style="color:var(--green); font-weight:bold;">00:00</span> | Ndërprerje: <span id="deadTimeDisplay" style="color:var(--red);">00:00</span></div>
-            <div>Ekipi Mik: <span id="oppPossPct">50%</span> (<span id="oppPossTime">00:00</span>)</div>
+            <div>Shtëpia: <span id="ourPossPct">50%</span> (<span id="ourPossTime">00:00</span>)</div>
+            <div style="color:#9ca3af; font-size:0.8rem;">KOHA EFEKTIVE: <span id="effectiveTimeDisplay" style="color:var(--green); font-weight:bold;">00:00</span></div>
+            <div>Miku: <span id="oppPossPct">50%</span> (<span id="oppPossTime">00:00</span>)</div>
         </div>
         <div class="progress-bar-wrap">
             <div class="progress-team" id="ourBar" style="width: 50%;"></div>
             <div class="progress-opp" id="oppBar" style="width: 50%;"></div>
         </div>
         <div class="possession-btns">
-            <button class="pos-btn" style="background:var(--accent); color:#000;" onclick="setPossession('our', 'Ekipi Shtëpisë')">Topi te Ekipi Shtëpisë</button>
+            <button class="pos-btn" style="background:var(--accent); color:#000;" onclick="setPossession('our', 'Shtëpia')">Topi te Shtëpia</button>
             <button class="pos-btn" style="background:#4b5563;" onclick="setPossession('none', 'Ndërprerje')">Topi Jashtë / Ndërprerje</button>
-            <button class="pos-btn" style="background:var(--red);" onclick="setPossession('opp', 'Ekipi Mik')">Topi te Ekipi Mik</button>
+            <button class="pos-btn" style="background:var(--red);" onclick="setPossession('opp', 'Miku')">Topi te Miku</button>
         </div>
     </div>
 
-    <!-- STUDIO GRID: VIDEO PLAYER ME OPCIONE TË PLOTA + FUSHAT E LOJTARËVE -->
+    <!-- VIDEO PLAYER-I I INTEGRUAR DHE FUSHAT TAKTIKE -->
     <div class="studio-grid">
-        
-        <!-- VIDEO PLAYER-I MESHUMË MOShI DHE NGARKIM SKEDARI -->
         <div class="video-box">
             <div class="section-title" style="margin:0;">🎥 Player Video Ndeshjeje</div>
-            
             <div class="video-controls">
-                <input type="text" id="videoUrlInput" style="flex:2;" placeholder="Vendos URL (YouTube / Stream Direct / MP4)">
+                <input type="text" id="videoUrlInput" style="flex:2;" placeholder="Vendos Link MP4 ose YouTube">
                 <button class="btn btn-accent" onclick="loadVideoUrl()">Lidhe Link-un</button>
-                <label class="btn btn-gold" style="cursor:pointer; display:inline-block;">
-                    📂 Ngarko Video MP4
+                <label class="btn btn-gold" style="cursor:pointer;">
+                    📂 Ngarko MP4
                     <input type="file" id="videoFileInput" accept="video/*" style="display:none;" onchange="loadLocalVideo(event)">
                 </label>
             </div>
-
             <div class="video-container" id="videoWrapper">
                 <video id="localVideoPlayer" controls style="width:100%; height:100%;">
                     <source src="" type="video/mp4">
-                    Browseri juaj nuk e mbështet këtë element videoje.
+                    Ju lutem vendosni një video MP4 ose link për ta shfaqur këtu.
                 </video>
             </div>
         </div>
 
-        <!-- FUSHAT E VOGLA TAKTIKE -->
         <div class="pitches-container">
             <div class="mini-pitch">
                 <div class="pitch-title">🏠 Ekipi Shtëpisë</div>
                 <div class="players-grid" id="homePlayersPitch"></div>
             </div>
-
             <div class="mini-pitch" style="border-color: var(--red);">
                 <div class="pitch-title" style="color: #fca5a5;">✈️ Ekipi Mik</div>
                 <div class="players-grid" id="awayPlayersPitch"></div>
             </div>
         </div>
-
     </div>
 
     <div class="main-grid">
-        
         <!-- MATRICA E TAGGING-UT -->
         <div class="panel">
-            
             <div class="inputs-grid">
                 <div>
-                    <label>Lojtari i Parë (Nga):</label>
+                    <label>Lojtari (Nga):</label>
                     <input type="text" id="playerInput" placeholder="P.sh. Nr. 10" value="Nr. 10">
                 </div>
                 <div>
-                    <label>Lojtari i Dytë (Tek/Pritës):</label>
+                    <label>Lojtari (Tek):</label>
                     <input type="text" id="receiverInput" placeholder="P.sh. Nr. 9">
                 </div>
-                <!-- HEQUR ZONAT -> SHTUAR POZICIONET SIPAS MODULIT TAKTIK -->
+                <!-- POZICIONET SIPAS MODULIT TAKTIK (HEQUR ZONAT) -->
                 <div>
-                    <label>Pozicioni (Moduli):</label>
+                    <label>Pozicioni i Modulit:</label>
                     <select id="positionInput">
                         <option value="Portier (GK)">Portier (GK)</option>
-                        <option value="Mbrojtës Qendre (CB)">Mbrojtës Qendre (CB)</option>
+                        <option value="Mbrojtës Qendror (CB)">Mbrojtës Qendror (CB)</option>
                         <option value="Mbrojtës i Majtë (LB)">Mbrojtës i Majtë (LB)</option>
                         <option value="Mbrojtës i Djathtë (RB)">Mbrojtës i Djathtë (RB)</option>
-                        <option value="Piston / Wingback (LWB/RWB)">Piston / Wingback (LWB/RWB)</option>
+                        <option value="Piston Krahu (LWB/RWB)">Piston Krahu (LWB/RWB)</option>
                         <option value="Mesfushor Mbrojtës (CDM)">Mesfushor Mbrojtës (CDM)</option>
-                        <option value="Mesfushor Qendre (CM)">Mesfushor Qendre (CM)</option>
+                        <option value="Mesfushor Qendror (CM)">Mesfushor Qendror (CM)</option>
                         <option value="Mesfushor Sulmues (CAM)">Mesfushor Sulmues (CAM)</option>
-                        <option value="Sulmues Krahu Majtë (LW)">Sulmues Krahu Majtë (LW)</option>
-                        <option value="Sulmues Krahu Djathtë (RW)">Sulmues Krahu Djathtë (RW)</option>
+                        <option value="Sulmues Krahu (LW/RW)">Sulmues Krahu (LW/RW)</option>
                         <option value="Qendërsulmues (ST/CF)">Qendërsulmues (ST/CF)</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Intensiteti / Tipi:</label>
-                    <select id="intensityInput">
-                        <option value="Lojë me Poshtë">Lojë me Poshtë (Ground)</option>
-                        <option value="Vertikalizim">Vertikalizim i Shpejtë</option>
-                        <option value="Top i Gjatë">Top i Gjatë (Long Ball)</option>
-                        <option value="Kërcënim i Lartë (High xG)">Kërcënim i Lartë (High xG)</option>
                     </select>
                 </div>
                 <div>
@@ -460,7 +411,6 @@
                 </div>
             </div>
 
-            <!-- FAZA SULMUESE -->
             <div class="section-title">⚡ Faza Sulmuese & Krijim</div>
             <div class="tag-grid">
                 <button class="tag-btn tag-attack" onclick="tagEvent('Build-up', 'Attack')">Build-up</button>
@@ -469,106 +419,55 @@
                 <button class="tag-btn tag-attack" onclick="tagEvent('Driblim i Suksesshëm', 'Attack')">Driblim (+)</button>
                 <button class="tag-btn tag-attack" onclick="tagEvent('Krosim në Zonë', 'Attack')">Krosim</button>
                 <button class="tag-btn tag-attack" onclick="tagEvent('Gjuajtje Në Portë', 'Attack')">Gjuajtje Portë</button>
-                <button class="tag-btn tag-attack" onclick="tagEvent('Gjuajtje Jashtë', 'Attack')">Gjuajtje Jashtë</button>
                 <button class="tag-btn tag-attack" style="background:#15803d; color:white;" onclick="tagEvent('GOL !', 'Attack')">⚽ GOL !</button>
             </div>
 
-            <!-- FAZA MBROJTËSE & TRANZICIONI -->
             <div class="section-title">🛡️ Faza Mbrojtëse & Presingu</div>
             <div class="tag-grid">
                 <button class="tag-btn tag-defense" onclick="tagEvent('Presing i Lartë', 'Defense')">Presing I Lartë</button>
                 <button class="tag-btn tag-defense" onclick="tagEvent('Duel i Fituar', 'Defense')">Duel i Fituar (+)</button>
                 <button class="tag-btn tag-defense" onclick="tagEvent('Duel i Humbur', 'Defense')">Duel i Humbur (-)</button>
                 <button class="tag-btn tag-defense" onclick="tagEvent('Ndërprerje Topi', 'Defense')">Ndërprerje Topi</button>
-                <button class="tag-btn tag-defense" onclick="tagEvent('Spastrim (Clearance)', 'Defense')">Spastrim</button>
                 <button class="tag-btn tag-trans" onclick="tagEvent('Tranzicion Pozitiv', 'Trans')">Tranzicion (+)</button>
-                <button class="tag-btn tag-trans" onclick="tagEvent('Humbje Topi (Turnover)', 'Trans')">Humbje Topi (-)</button>
-                <button class="tag-btn tag-defense" onclick="tagEvent('Faull i Shkaktuar', 'Defense')">Faull Shkaktuar</button>
+                <button class="tag-btn tag-trans" onclick="tagEvent('Humbje Topi', 'Trans')">Humbje Topi (-)</button>
             </div>
-
-            <!-- RASTET STATIKE -->
-            <div class="section-title">🎯 Rastet Statike (Set Pieces)</div>
-            <div class="tag-grid">
-                <button class="tag-btn tag-set" onclick="tagEvent('Korner Sulm', 'SetPiece')">Korner Sulm</button>
-                <button class="tag-btn tag-set" onclick="tagEvent('Korner Mbrojtje', 'SetPiece')">Korner Mbrojtje</button>
-                <button class="tag-btn tag-set" onclick="tagEvent('Goditje Dënimi Sulm', 'SetPiece')">Goditje Dënimi (+)</button>
-                <button class="tag-btn tag-set" onclick="tagEvent('Penallti', 'SetPiece')">Penallti</button>
-            </div>
-
         </div>
 
-        <!-- DASHBOARD STATISTIKASH & REGJISTRI -->
+        <!-- LOG-U I NDESHJES -->
         <div class="panel">
-            
-            <div class="section-title" style="margin-top:0;">📊 Përmbledhje Taktike Live</div>
-            <div class="stats-summary">
-                <div class="stat-card">
-                    <div class="val" id="statShots">0</div>
-                    <div class="lbl">Gjuajtje Gjithsej</div>
-                </div>
-                <div class="stat-card">
-                    <div class="val" id="statPasses">0</div>
-                    <div class="lbl">Pasime Kyçe / Progresive</div>
-                </div>
-                <div class="stat-card">
-                    <div class="val" id="statDuels">0%</div>
-                    <div class="lbl">Duele të Fituara</div>
-                </div>
-                <div class="stat-card">
-                    <div class="val" id="statTurnovers">0</div>
-                    <div class="lbl">Humbje Topi</div>
-                </div>
-            </div>
-
-            <div class="section-title">📋 Log-u i Ndeshjes (<span id="logCount">0</span>)</div>
-            
+            <div class="section-title" style="margin-top:0;">📋 Log-u i Ndeshjes (<span id="logCount">0</span>)</div>
             <div class="table-wrap">
                 <table>
                     <thead>
                         <tr>
                             <th>Koha</th>
-                            <th>Lojtari (Nga->Tek)</th>
+                            <th>Lojtari</th>
                             <th>Ngjarja</th>
-                            <th>Pozicioni / Tipi</th>
+                            <th>Pozicioni</th>
                             <th>Statusi</th>
                         </tr>
                     </thead>
-                    <tbody id="logBody">
-                        <!-- Të dhënat shtohen këtu -->
-                    </tbody>
+                    <tbody id="logBody"></tbody>
                 </table>
             </div>
-
             <div style="margin-top: 15px; display: flex; gap: 8px;">
-                <button class="btn btn-accent" style="width: 50%;" onclick="exportCSV()">📥 Eksporto CSV (Excel)</button>
-                <button class="btn btn-gold" style="width: 50%;" onclick="exportJSON()">📄 Eksporto JSON</button>
+                <button class="btn btn-accent" style="width: 100%;" onclick="exportCSV()">📥 Eksporto në Excel (CSV)</button>
             </div>
-
         </div>
-
     </div>
 
     <script>
-        // KONTROLLET E VIDEOS
+        // FUNKSIONET E VIDEOS
         function loadVideoUrl() {
             let url = document.getElementById('videoUrlInput').value.trim();
             let wrapper = document.getElementById('videoWrapper');
-
-            if (!url) {
-                alert("Ju lutem vendosni një URL të vlefshme videoje!");
-                return;
-            }
+            if (!url) return alert("Ju lutem vendosni një URL!");
 
             if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                let videoId = "";
-                if (url.includes('v=')) {
-                    videoId = url.split('v=')[1].split('&')[0];
-                } else if (url.includes('youtu.be/')) {
-                    videoId = url.split('youtu.be/')[1].split('?')[0];
-                }
+                let videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('youtu.be/')[1].split('?')[0];
                 wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%;"></iframe>`;
             } else {
-                wrapper.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${url}" type="video/mp4">Browseri juaj nuk e mbështet këtë format videoje.</video>`;
+                wrapper.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${url}" type="video/mp4"></video>`;
             }
         }
 
@@ -577,102 +476,26 @@
             if (file) {
                 let wrapper = document.getElementById('videoWrapper');
                 let fileURL = URL.createObjectURL(file);
-                wrapper.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${fileURL}" type="${file.type}">Browseri juaj nuk e mbështet këtë skedar.</video>`;
+                wrapper.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${fileURL}" type="${file.type}"></video>`;
             }
         }
 
-        // LISTA E NUMRAVE TË EKIPIVE
-        const homePlayerNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        const awayPlayerNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-        let playerPossessionSeconds = {}; 
+        // TIMERI DHE BUTONAT E REJ TË SHTUAR
         let seconds = 0;
         let timerInterval = null;
         let currentPeriod = 1;
-
-        let currentPossession = 'none'; 
-        let currentActivePlayerKey = null; 
-
+        let currentPossession = 'none';
         let ourPossSeconds = 0;
         let oppPossSeconds = 0;
-        let deadTimeSeconds = 0;
-
         let logs = [];
-
-        let totalShots = 0;
-        let keyPasses = 0;
-        let duelsWon = 0;
-        let duelsTotal = 0;
-        let turnovers = 0;
-
-        function initMiniPitches() {
-            let homeContainer = document.getElementById('homePlayersPitch');
-            let awayContainer = document.getElementById('awayPlayersPitch');
-
-            homeContainer.innerHTML = "";
-            awayContainer.innerHTML = "";
-
-            homePlayerNumbers.forEach(num => {
-                let key = 'Home-' + num;
-                playerPossessionSeconds[key] = 0;
-                homeContainer.innerHTML += `
-                    <div class="player-node" id="node-${key}" onclick="selectPlayerPossession('home', ${num})">
-                        <div class="player-num">Nr. ${num}</div>
-                        <div class="player-stats" id="stat-${key}">0s (0%)</div>
-                    </div>
-                `;
-            });
-
-            awayPlayerNumbers.forEach(num => {
-                let key = 'Away-' + num;
-                playerPossessionSeconds[key] = 0;
-                awayContainer.innerHTML += `
-                    <div class="player-node" id="node-${key}" onclick="selectPlayerPossession('away', ${num})" style="border-color:#ef4444;">
-                        <div class="player-num" style="color:#fca5a5;">Nr. ${num}</div>
-                        <div class="player-stats" id="stat-${key}">0s (0%)</div>
-                    </div>
-                `;
-            });
-        }
-
-        function selectPlayerPossession(team, num) {
-            let key = (team === 'home' ? 'Home-' : 'Away-') + num;
-            let playerLabel = (team === 'home' ? 'Shtëpia Nr. ' : 'Mik Nr. ') + num;
-
-            let currentP1 = document.getElementById('playerInput').value;
-            if (currentP1 && currentP1 !== playerLabel) {
-                document.getElementById('receiverInput').value = playerLabel;
-            } else {
-                document.getElementById('playerInput').value = playerLabel;
-            }
-
-            currentActivePlayerKey = key;
-
-            if (team === 'home') {
-                setPossession('our', playerLabel);
-            } else {
-                setPossession('opp', playerLabel);
-            }
-
-            document.querySelectorAll('.player-node').forEach(el => el.classList.remove('active-possession'));
-            let activeNode = document.getElementById('node-' + key);
-            if(activeNode) activeNode.classList.add('active-possession');
-        }
 
         function startTimer() {
             if (!timerInterval) {
                 timerInterval = setInterval(() => {
                     seconds++;
                     updateTimerDisplay();
-
                     if (currentPossession === 'our') ourPossSeconds++;
                     else if (currentPossession === 'opp') oppPossSeconds++;
-                    else deadTimeSeconds++;
-
-                    if (currentActivePlayerKey && currentPossession !== 'none') {
-                        playerPossessionSeconds[currentActivePlayerKey] = (playerPossessionSeconds[currentActivePlayerKey] || 0) + 1;
-                    }
-
                     updatePossessionDisplay();
                 }, 1000);
             }
@@ -683,92 +506,47 @@
             timerInterval = null;
         }
 
-        // FUNKSIONET E REJA TË BUTONAVE TË KOHËS
         function endFirstHalf() {
             pauseTimer();
             currentPeriod = 2;
             document.getElementById('periodDisplay').innerText = "Pjesa 2";
             setPossession('none', 'Ndërprerje');
-            alert("Mbyllet Pjesa e Parë! Kohëmatësi u ndalua.");
+            alert("Mbyllet Pjesa e Parë!");
         }
 
         function endMatch() {
             pauseTimer();
             setPossession('none', 'Ndërprerje');
             document.getElementById('periodDisplay').innerText = "Përfunduar";
-            alert("Përfundoi Ndeshja! Mund të eksportoni raportet përfundimtare.");
+            alert("Mbaron Ndeshja!");
         }
 
         function resetAll() {
-            if(confirm("A dëshironi të fshini të gjitha të dhënat e ndeshjes?")) {
+            if(confirm("A dëshironi të fshini të gjitha të dhënat?")) {
                 pauseTimer();
-                seconds = 0;
-                ourPossSeconds = 0;
-                oppPossSeconds = 0;
-                deadTimeSeconds = 0;
-                currentPeriod = 1;
-                currentPossession = 'none';
-                currentActivePlayerKey = null;
-                logs = [];
-                totalShots = 0; keyPasses = 0; duelsWon = 0; duelsTotal = 0; turnovers = 0;
-                
+                seconds = 0; ourPossSeconds = 0; oppPossSeconds = 0; currentPeriod = 1; logs = [];
                 document.getElementById('periodDisplay').innerText = "Pjesa 1";
-                initMiniPitches();
-                updateTimerDisplay();
-                updatePossessionDisplay();
-                renderLogs();
-                updateStatsDashboard();
+                updateTimerDisplay(); updatePossessionDisplay(); renderLogs();
             }
         }
 
         function updateTimerDisplay() {
             let m = Math.floor(seconds / 60);
             let s = seconds % 60;
-            document.getElementById('timer').innerText = 
-                (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+            document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
         }
 
-        function setPossession(team, label) {
-            currentPossession = team;
-            if (team === 'none') {
-                currentActivePlayerKey = null;
-                document.querySelectorAll('.player-node').forEach(el => el.classList.remove('active-possession'));
-            }
-        }
+        function setPossession(team) { currentPossession = team; }
 
         function updatePossessionDisplay() {
-            let totalPossTime = ourPossSeconds + oppPossSeconds;
-            let ourPct = 50;
-            let oppPct = 50;
-
-            if (totalPossTime > 0) {
-                ourPct = Math.round((ourPossSeconds / totalPossTime) * 100);
-                oppPct = 100 - ourPct;
-            }
-
+            let total = ourPossSeconds + oppPossSeconds;
+            let ourPct = total > 0 ? Math.round((ourPossSeconds / total) * 100) : 50;
+            let oppPct = 100 - ourPct;
             document.getElementById('ourBar').style.width = ourPct + "%";
             document.getElementById('oppBar').style.width = oppPct + "%";
-            
             document.getElementById('ourPossPct').innerText = ourPct + "%";
             document.getElementById('oppPossPct').innerText = oppPct + "%";
-
-            document.getElementById('ourPossTime').innerText = formatSecs(ourPossSeconds);
-            document.getElementById('oppPossTime').innerText = formatSecs(oppPossSeconds);
-
-            document.getElementById('effectiveTimeDisplay').innerText = formatSecs(totalPossTime);
-            document.getElementById('deadTimeDisplay').innerText = formatSecs(deadTimeSeconds);
-
-            Object.keys(playerPossessionSeconds).forEach(key => {
-                let pSecs = playerPossessionSeconds[key];
-                let isHome = key.startsWith('Home');
-                let teamTotalSecs = isHome ? ourPossSeconds : oppPossSeconds;
-                let pPct = teamTotalSecs > 0 ? Math.round((pSecs / teamTotalSecs) * 100) : 0;
-
-                let statEl = document.getElementById('stat-' + key);
-                if (statEl) {
-                    statEl.innerText = `${pSecs}s (${pPct}%)`;
-                }
-            });
+            document.getElementById('effectiveTimeDisplay').innerText = formatSecs(total);
         }
 
         function formatSecs(sec) {
@@ -781,107 +559,58 @@
             let timeStr = document.getElementById('timer').innerText;
             let p1 = document.getElementById('playerInput').value || "Ekipi";
             let p2 = document.getElementById('receiverInput').value;
-            let playerFull = p2 ? `${p1} ➔ ${p2}` : p1;
-
             let position = document.getElementById('positionInput').value;
-            let intensity = document.getElementById('intensityInput').value;
             let outcome = document.getElementById('outcomeInput').value;
 
-            let logItem = {
+            logs.push({
                 period: "Pjesa " + currentPeriod,
                 timestamp: timeStr,
-                seconds: seconds,
-                player: playerFull,
+                player: p2 ? `${p1} ➔ ${p2}` : p1,
                 event: eventName,
-                category: category,
-                position: `${position} (${intensity})`,
-                outcome: outcome,
-                possessionPctAtTime: document.getElementById('ourPossPct').innerText
-            };
-
-            logs.push(logItem);
+                position: position,
+                outcome: outcome
+            });
 
             document.getElementById('receiverInput').value = "";
-
-            if (eventName.includes('Gjuajtje') || eventName.includes('GOL')) totalShots++;
-            if (eventName.includes('Pasim Kyç') || eventName.includes('Pasim Progresiv')) keyPasses++;
-            if (eventName.includes('Duel i Fituar')) { duelsWon++; duelsTotal++; }
-            if (eventName.includes('Duel i Humbur')) { duelsTotal++; }
-            if (eventName.includes('Humbje Topi')) turnovers++;
-
             renderLogs();
-            updateStatsDashboard();
-        }
-
-        function updateStatsDashboard() {
-            document.getElementById('statShots').innerText = totalShots;
-            document.getElementById('statPasses').innerText = keyPasses;
-            
-            let duelPct = duelsTotal > 0 ? Math.round((duelsWon / duelsTotal) * 100) + "%" : "0%";
-            document.getElementById('statDuels').innerText = duelPct;
-            document.getElementById('statTurnovers').innerText = turnovers;
         }
 
         function renderLogs() {
             let tbody = document.getElementById('logBody');
             tbody.innerHTML = "";
-
             for (let i = logs.length - 1; i >= 0; i--) {
-                let log = logs[i];
-                let isPos = log.outcome.includes('+');
-                let row = `<tr>
-                    <td><strong>${log.timestamp}</strong> (${log.period})</td>
-                    <td>${log.player}</td>
-                    <td>${log.event}</td>
-                    <td>${log.position}</td>
-                    <td style="color:${isPos ? '#22c55e' : '#ef4444'}">${log.outcome}</td>
+                let l = logs[i];
+                let isPos = l.outcome.includes('+');
+                tbody.innerHTML += `<tr>
+                    <td><strong>${l.timestamp}</strong></td>
+                    <td>${l.player}</td>
+                    <td>${l.event}</td>
+                    <td>${l.position}</td>
+                    <td style="color:${isPos ? '#22c55e' : '#ef4444'}">${l.outcome}</td>
                 </tr>`;
-                tbody.innerHTML += row;
             }
-
             document.getElementById('logCount').innerText = logs.length;
         }
 
         function exportCSV() {
-            if (logs.length === 0) { alert("Nuk ka të dhëna për të eksportuar!"); return; }
-            
-            let csv = "Pjesa,Koha,Sekonda,Lojtari_Nga_Tek,Ngjarja,Kategoria,Pozicioni_Intensiteti,Vleresimi,Posedimi_Ekipe\n";
-            logs.forEach(l => {
-                csv += `"${l.period}","${l.timestamp}","${l.seconds}","${l.player}","${l.event}","${l.category}","${l.position}","${l.outcome}","${l.possessionPctAtTime}"\n`;
-            });
-
-            let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            if (logs.length === 0) return alert("Nuk ka të dhëna!");
+            let csv = "Pjesa,Koha,Lojtari,Ngjarja,Pozicioni,Rezultati\n";
+            logs.forEach(l => { csv += `"${l.period}","${l.timestamp}","${l.player}","${l.event}","${l.position}","${l.outcome}"\n`; });
+            let blob = new Blob([csv], { type: 'text/csv' });
             let link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Match_Tagging_Report_${new Date().toISOString().slice(0,10)}.csv`;
+            link.download = `Match_Report.csv`;
             link.click();
         }
 
-        function exportJSON() {
-            if (logs.length === 0) { alert("Nuk ka të dhëna për të eksportuar!"); return; }
-            
-            let fullReport = {
-                metadata: {
-                    date: new Date().toLocaleDateString('sq-AL'),
-                    ourPossessionPercent: document.getElementById('ourPossPct').innerText,
-                    oppPossessionPercent: document.getElementById('oppPossPct').innerText,
-                    effectiveGameTimeSeconds: ourPossSeconds + oppPossSeconds,
-                    deadTimeSeconds: deadTimeSeconds,
-                    totalEventsTagged: logs.length
-                },
-                playerPossessionStats: playerPossessionSeconds,
-                logs: logs
-            };
-
-            let blob = new Blob([JSON.stringify(fullReport, null, 2)], { type: 'application/json' });
-            let link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `Match_Analytics_${new Date().toISOString().slice(0,10)}.json`;
-            link.click();
-        }
-
+        // INICIALIZIMI I LOJTARËVE NË FUSHË
         window.onload = function() {
-            initMiniPitches();
+            let homeContainer = document.getElementById('homePlayersPitch');
+            let awayContainer = document.getElementById('awayPlayersPitch');
+            for(let i=1; i<=11; i++) {
+                homeContainer.innerHTML += `<div class="player-node" onclick="document.getElementById('playerInput').value='Shtëpia Nr. ${i}'"><div class="player-num">Nr. ${i}</div></div>`;
+                awayContainer.innerHTML += `<div class="player-node" style="border-color:#ef4444;" onclick="document.getElementById('playerInput').value='Mik Nr. ${i}'"><div class="player-num" style="color:#fca5a5;">Nr. ${i}</div></div>`;
+            }
         };
     </script>
 </body>
