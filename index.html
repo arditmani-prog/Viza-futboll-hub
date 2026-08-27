@@ -329,7 +329,7 @@
     <div class="possession-bar-container">
         <div class="possession-headers">
             <div>Ekipi Shtëpisë: <span id="ourPossPct">50%</span> (<span id="ourPossTime">00:00</span>)</div>
-            <div style="color:#9ca3af; font-size:0.9rem;">MBAJTJA E TOPIT LIVE</div>
+            <div style="color:#9ca3af; font-size:0.85rem;">KOHA EFEKTIVE: <span id="effectiveTimeDisplay" style="color:var(--green); font-weight:bold;">00:00</span> | Ndërprerje: <span id="deadTimeDisplay" style="color:var(--red);">00:00</span></div>
             <div>Ekipi Mik: <span id="oppPossPct">50%</span> (<span id="oppPossTime">00:00</span>)</div>
         </div>
         <div class="progress-bar-wrap">
@@ -369,8 +369,12 @@
             
             <div class="inputs-grid">
                 <div>
-                    <label>Lojtari i Zgjedhur:</label>
+                    <label>Lojtari i Parë (Nga):</label>
                     <input type="text" id="playerInput" placeholder="P.sh. Nr. 10" value="Nr. 10">
+                </div>
+                <div>
+                    <label>Lojtari i Dytë (Tek/Pritës):</label>
+                    <input type="text" id="receiverInput" placeholder="P.sh. Nr. 9">
                 </div>
                 <div>
                     <label>Zona e Fushës:</label>
@@ -384,7 +388,16 @@
                     </select>
                 </div>
                 <div>
-                    <label>Rezultati i Aksionit:</label>
+                    <label>Intensiteti / Tipi:</label>
+                    <select id="intensityInput">
+                        <option value="Lojë me Poshtë">Lojë me Poshtë (Ground)</option>
+                        <option value="Vertikalizim">Vertikalizim i Shpejtë</option>
+                        <option value="Top i Gjatë">Top i Gjatë (Long Ball)</option>
+                        <option value="Kërcënim i Lartë (High xG)">Kërcënim i Lartë (High xG)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Rezultati:</label>
                     <select id="outcomeInput">
                         <option value="Pozitiv (+)">Pozitiv (+)</option>
                         <option value="Negativ (-)">Negativ (-)</option>
@@ -459,9 +472,9 @@
                     <thead>
                         <tr>
                             <th>Koha</th>
-                            <th>Lojtari</th>
+                            <th>Lojtari (Nga->Tek)</th>
                             <th>Ngjarja</th>
-                            <th>Zona</th>
+                            <th>Zona / Tipi</th>
                             <th>Statusi</th>
                         </tr>
                     </thead>
@@ -486,7 +499,7 @@
         const awayPlayerNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
         // MBROJTJA E KOHËS SIPAS LOJTARËVE (PERSONAL POSSESSION)
-        let playerPossessionSeconds = {}; // { 'Home-10': 45, 'Away-7': 20 }
+        let playerPossessionSeconds = {}; 
 
         // TE DHËNAT E KRONOMETRIT & POSEDIMIT
         let seconds = 0;
@@ -494,10 +507,11 @@
         let currentPeriod = 1;
 
         let currentPossession = 'none'; // 'our', 'opp', 'none'
-        let currentActivePlayerKey = null; // P.sh. 'Home-10'
+        let currentActivePlayerKey = null; 
 
         let ourPossSeconds = 0;
         let oppPossSeconds = 0;
+        let deadTimeSeconds = 0;
 
         let logs = [];
 
@@ -543,17 +557,22 @@
             let key = (team === 'home' ? 'Home-' : 'Away-') + num;
             let playerLabel = (team === 'home' ? 'Shtëpia Nr. ' : 'Mik Nr. ') + num;
 
-            document.getElementById('playerInput').value = playerLabel;
+            // Plotësim i mençur për lidhjen e pasimeve
+            let currentP1 = document.getElementById('playerInput').value;
+            if (currentP1 && currentP1 !== playerLabel) {
+                document.getElementById('receiverInput').value = playerLabel;
+            } else {
+                document.getElementById('playerInput').value = playerLabel;
+            }
+
             currentActivePlayerKey = key;
 
-            // Vendos automatikisht edhe ekipin që ka posedimin
             if (team === 'home') {
                 setPossession('our', playerLabel);
             } else {
                 setPossession('opp', playerLabel);
             }
 
-            // Highlighting vizual në fushë
             document.querySelectorAll('.player-node').forEach(el => el.classList.remove('active-possession'));
             let activeNode = document.getElementById('node-' + key);
             if(activeNode) activeNode.classList.add('active-possession');
@@ -565,11 +584,10 @@
                     seconds++;
                     updateTimerDisplay();
 
-                    // Llogaritja e mbajtjes së topit sipas sekondave ekipore
                     if (currentPossession === 'our') ourPossSeconds++;
                     else if (currentPossession === 'opp') oppPossSeconds++;
+                    else deadTimeSeconds++;
 
-                    // Llogaritja e mbajtjes se topit sipas lojtarit individual
                     if (currentActivePlayerKey && currentPossession !== 'none') {
                         playerPossessionSeconds[currentActivePlayerKey] = (playerPossessionSeconds[currentActivePlayerKey] || 0) + 1;
                     }
@@ -595,6 +613,7 @@
                 seconds = 0;
                 ourPossSeconds = 0;
                 oppPossSeconds = 0;
+                deadTimeSeconds = 0;
                 currentPossession = 'none';
                 currentActivePlayerKey = null;
                 logs = [];
@@ -642,6 +661,10 @@
             document.getElementById('ourPossTime').innerText = formatSecs(ourPossSeconds);
             document.getElementById('oppPossTime').innerText = formatSecs(oppPossSeconds);
 
+            // Koha Efektive vs Topi i Vdekur
+            document.getElementById('effectiveTimeDisplay').innerText = formatSecs(totalPossTime);
+            document.getElementById('deadTimeDisplay').innerText = formatSecs(deadTimeSeconds);
+
             // PËRDITËSIMI I PERQINDJEVE TË LOJTARËVE NË FUSHË
             Object.keys(playerPossessionSeconds).forEach(key => {
                 let pSecs = playerPossessionSeconds[key];
@@ -665,23 +688,30 @@
         // ETIKETIMI I NGJARJEVE (TAGGING LOGIC)
         function tagEvent(eventName, category) {
             let timeStr = document.getElementById('timer').innerText;
-            let player = document.getElementById('playerInput').value || "Ekipi";
+            let p1 = document.getElementById('playerInput').value || "Ekipi";
+            let p2 = document.getElementById('receiverInput').value;
+            let playerFull = p2 ? `${p1} ➔ ${p2}` : p1;
+
             let zone = document.getElementById('zoneInput').value;
+            let intensity = document.getElementById('intensityInput').value;
             let outcome = document.getElementById('outcomeInput').value;
 
             let logItem = {
                 period: "Pjesa " + currentPeriod,
                 timestamp: timeStr,
                 seconds: seconds,
-                player: player,
+                player: playerFull,
                 event: eventName,
                 category: category,
-                zone: zone,
+                zone: `${zone} (${intensity})`,
                 outcome: outcome,
                 possessionPctAtTime: document.getElementById('ourPossPct').innerText
             };
 
             logs.push(logItem);
+
+            // Reseto marrësin e pasimit për të mos u përsëritur gabimisht
+            document.getElementById('receiverInput').value = "";
 
             // Përditësimi i metrikave
             if (eventName.includes('Gjuajtje') || eventName.includes('GOL')) totalShots++;
@@ -727,7 +757,7 @@
         function exportCSV() {
             if (logs.length === 0) { alert("Nuk ka të dhëna për të eksportuar!"); return; }
             
-            let csv = "Pjesa,Koha,Sekonda,Lojtari,Ngjarja,Kategoria,Zona,Vleresimi,Posedimi_Ekipe\n";
+            let csv = "Pjesa,Koha,Sekonda,Lojtari_Nga_Tek,Ngjarja,Kategoria,Zona_Intensiteti,Vleresimi,Posedimi_Ekipe\n";
             logs.forEach(l => {
                 csv += `"${l.period}","${l.timestamp}","${l.seconds}","${l.player}","${l.event}","${l.category}","${l.zone}","${l.outcome}","${l.possessionPctAtTime}"\n`;
             });
@@ -747,6 +777,8 @@
                     date: new Date().toLocaleDateString('sq-AL'),
                     ourPossessionPercent: document.getElementById('ourPossPct').innerText,
                     oppPossessionPercent: document.getElementById('oppPossPct').innerText,
+                    effectiveGameTimeSeconds: ourPossSeconds + oppPossSeconds,
+                    deadTimeSeconds: deadTimeSeconds,
                     totalEventsTagged: logs.length
                 },
                 playerPossessionStats: playerPossessionSeconds,
