@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Match Tagger & Analytics | Viza Futboll Hub</title>
+    <title>Pro Match Tagger & Video Analytics | Viza Futboll Hub</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -115,16 +115,59 @@
             color: white;
         }
 
+        /* STRUKTURA STUDIO: VIDEO MAJTAS, ANALIZA DJATHTAS */
+        .studio-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 1024px) {
+            .studio-grid { grid-template-columns: 1fr; }
+        }
+
+        .video-box {
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .video-container iframe, .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 10px;
+            background: var(--card-bg);
+            padding: 8px;
+            border-radius: 6px;
+        }
+
         /* DY FUSHAT E VOGLA TAKTIKE (HOME & AWAY) */
         .pitches-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        @media (max-width: 768px) {
-            .pitches-container { grid-template-columns: 1fr; }
         }
 
         .mini-pitch {
@@ -173,16 +216,8 @@
             box-shadow: 0 0 10px var(--gold);
         }
 
-        .player-num {
-            font-size: 1.1rem;
-            font-weight: 800;
-        }
-
-        .player-stats {
-            font-size: 0.7rem;
-            margin-top: 2px;
-            color: #cbd5e1;
-        }
+        .player-num { font-size: 1.1rem; font-weight: 800; }
+        .player-stats { font-size: 0.7rem; margin-top: 2px; color: #cbd5e1; }
 
         /* STRUKTURA KRYESORE */
         .main-grid {
@@ -271,16 +306,8 @@
             text-align: center;
         }
 
-        .stat-card .val {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--accent);
-        }
-
-        .stat-card .lbl {
-            font-size: 0.75rem;
-            color: #9ca3af;
-        }
+        .stat-card .val { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
+        .stat-card .lbl { font-size: 0.75rem; color: #9ca3af; }
 
         /* TABELA E LOG-UVE */
         .table-wrap {
@@ -290,18 +317,8 @@
             border-radius: 6px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
-        }
-
-        th, td {
-            padding: 7px 10px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th, td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--border); }
         th { background: var(--card-bg); color: var(--accent); position: sticky; top: 0; }
     </style>
 </head>
@@ -310,8 +327,8 @@
     <!-- KRONOMETRI DHE KONTROLLET -->
     <div class="header">
         <div>
-            <h2 style="margin:0;">Pro Match Tagger</h2>
-            <small style="color:#9ca3af;">Platforma Profesionale e Analizës Taktike me Posedim Live & Loja sipas Numrave</small>
+            <h2 style="margin:0;">Pro Match Tagger & Studio</h2>
+            <small style="color:#9ca3af;">Analizë Video Live, Posedim & Tagging Taktik</small>
         </div>
         <div class="timer-box">
             <span class="period-badge" id="periodDisplay">Pjesa 1</span>
@@ -325,7 +342,7 @@
         </div>
     </div>
 
-    <!-- PANEL-I I POSEDIMIT TË TOPIT (POSSESSION TRACKER) -->
+    <!-- PANEL-I I POSEDIMIT TË TOPIT -->
     <div class="possession-bar-container">
         <div class="possession-headers">
             <div>Ekipi Shtëpisë: <span id="ourPossPct">50%</span> (<span id="ourPossTime">00:00</span>)</div>
@@ -343,23 +360,37 @@
         </div>
     </div>
 
-    <!-- DY FUSHAT E VOGLA TAKTIKE ME NUMRA LOJTARËSH -->
-    <div class="pitches-container">
-        <!-- FUSHA 1: EKIPI I SHTËPISË -->
-        <div class="mini-pitch">
-            <div class="pitch-title">🏠 Ekipi Shtëpisë (Klikoni Numrin)</div>
-            <div class="players-grid" id="homePlayersPitch">
-                <!-- Gjenerohet automatikisht me JS -->
+    <!-- SEKSHONI I STUDIOS: VIDEO LIVE + FUSHAT ME LOJTARË -->
+    <div class="studio-grid">
+        
+        <!-- VIDEO PLAYER-I LIVE -->
+        <div class="video-box">
+            <div class="section-title" style="margin:0;">🎥 Ndeshja Live / Video Stream</div>
+            
+            <div class="video-controls">
+                <input type="text" id="videoUrlInput" placeholder="Vendosni Link-un e YouTube apo Stream-it Direct (rtmp/mp4)">
+                <button class="btn btn-accent" onclick="loadVideo()">Lidhe Video-n</button>
+            </div>
+
+            <div class="video-container" id="videoWrapper">
+                <!-- Video Player i paracaktuar (YouTube Embed Demo) -->
+                <iframe id="mainVideoPlayer" src="https://www.youtube.com/embed/live_stream?channel=EXPLORE" allowfullscreen></iframe>
             </div>
         </div>
 
-        <!-- FUSHA 2: EKIPI MIK -->
-        <div class="mini-pitch" style="border-color: var(--red);">
-            <div class="pitch-title" style="color: #fca5a5;">✈️ Ekipi Mik (Klikoni Numrin)</div>
-            <div class="players-grid" id="awayPlayersPitch">
-                <!-- Gjenerohet automatikisht me JS -->
+        <!-- FUSHAT E VOGLA TAKTIKE -->
+        <div class="pitches-container">
+            <div class="mini-pitch">
+                <div class="pitch-title">🏠 Ekipi Shtëpisë</div>
+                <div class="players-grid" id="homePlayersPitch"></div>
+            </div>
+
+            <div class="mini-pitch" style="border-color: var(--red);">
+                <div class="pitch-title" style="color: #fca5a5;">✈️ Ekipi Mik</div>
+                <div class="players-grid" id="awayPlayersPitch"></div>
             </div>
         </div>
+
     </div>
 
     <div class="main-grid">
@@ -494,19 +525,45 @@
     </div>
 
     <script>
-        // LISTA E NUMRAVE TË EKIPIVET
+        // FUNKSIONI I NDIREKT I LOAD-IMIT TË VIDEOS
+        function loadVideo() {
+            let url = document.getElementById('videoUrlInput').value.trim();
+            let wrapper = document.getElementById('videoWrapper');
+
+            if (!url) {
+                alert("Ju lutem vendosni një URL të vlefshme videoje!");
+                return;
+            }
+
+            // Përpunimi i Link-eve të YouTube (përfshirë watch?v= ose shorts ose live)
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                let videoId = "";
+                if (url.includes('v=')) {
+                    videoId = url.split('v=')[1].split('&')[0];
+                } else if (url.includes('youtu.be/')) {
+                    videoId = url.split('youtu.be/')[1].split('?')[0];
+                }
+                if (videoId) {
+                    wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                } else {
+                    wrapper.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
+                }
+            } else {
+                // Skedar lokal video apo HTML5 stream direct
+                wrapper.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${url}" type="video/mp4">Browseri juaj nuk e mbështet këtë format videoje.</video>`;
+            }
+        }
+
+        // LISTA E NUMRAVE TË EKIPIVE
         const homePlayerNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         const awayPlayerNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-        // MBROJTJA E KOHËS SIPAS LOJTARËVE (PERSONAL POSSESSION)
         let playerPossessionSeconds = {}; 
-
-        // TE DHËNAT E KRONOMETRIT & POSEDIMIT
         let seconds = 0;
         let timerInterval = null;
         let currentPeriod = 1;
 
-        let currentPossession = 'none'; // 'our', 'opp', 'none'
+        let currentPossession = 'none'; 
         let currentActivePlayerKey = null; 
 
         let ourPossSeconds = 0;
@@ -515,14 +572,12 @@
 
         let logs = [];
 
-        // STATISTIKAT METRIKE
         let totalShots = 0;
         let keyPasses = 0;
         let duelsWon = 0;
         let duelsTotal = 0;
         let turnovers = 0;
 
-        // INICIALIZIMI I FUSHAVE TË VOGLA
         function initMiniPitches() {
             let homeContainer = document.getElementById('homePlayersPitch');
             let awayContainer = document.getElementById('awayPlayersPitch');
@@ -557,7 +612,6 @@
             let key = (team === 'home' ? 'Home-' : 'Away-') + num;
             let playerLabel = (team === 'home' ? 'Shtëpia Nr. ' : 'Mik Nr. ') + num;
 
-            // Plotësim i mençur për lidhjen e pasimeve
             let currentP1 = document.getElementById('playerInput').value;
             if (currentP1 && currentP1 !== playerLabel) {
                 document.getElementById('receiverInput').value = playerLabel;
@@ -661,11 +715,9 @@
             document.getElementById('ourPossTime').innerText = formatSecs(ourPossSeconds);
             document.getElementById('oppPossTime').innerText = formatSecs(oppPossSeconds);
 
-            // Koha Efektive vs Topi i Vdekur
             document.getElementById('effectiveTimeDisplay').innerText = formatSecs(totalPossTime);
             document.getElementById('deadTimeDisplay').innerText = formatSecs(deadTimeSeconds);
 
-            // PËRDITËSIMI I PERQINDJEVE TË LOJTARËVE NË FUSHË
             Object.keys(playerPossessionSeconds).forEach(key => {
                 let pSecs = playerPossessionSeconds[key];
                 let isHome = key.startsWith('Home');
@@ -685,7 +737,6 @@
             return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
         }
 
-        // ETIKETIMI I NGJARJEVE (TAGGING LOGIC)
         function tagEvent(eventName, category) {
             let timeStr = document.getElementById('timer').innerText;
             let p1 = document.getElementById('playerInput').value || "Ekipi";
@@ -710,10 +761,8 @@
 
             logs.push(logItem);
 
-            // Reseto marrësin e pasimit për të mos u përsëritur gabimisht
             document.getElementById('receiverInput').value = "";
 
-            // Përditësimi i metrikave
             if (eventName.includes('Gjuajtje') || eventName.includes('GOL')) totalShots++;
             if (eventName.includes('Pasim Kyç') || eventName.includes('Pasim Progresiv')) keyPasses++;
             if (eventName.includes('Duel i Fituar')) { duelsWon++; duelsTotal++; }
@@ -753,7 +802,6 @@
             document.getElementById('logCount').innerText = logs.length;
         }
 
-        // EKSPORTIMI I TË DHËNAVE
         function exportCSV() {
             if (logs.length === 0) { alert("Nuk ka të dhëna për të eksportuar!"); return; }
             
@@ -792,7 +840,6 @@
             link.click();
         }
 
-        // INITIALIZE ON LOAD
         window.onload = function() {
             initMiniPitches();
         };
