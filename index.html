@@ -16,6 +16,7 @@
             --gold: #f59e0b;
             --text: #f9fafb;
             --border: #374151;
+            --pitch-green: #15803d;
         }
 
         body {
@@ -38,10 +39,7 @@
             border-bottom: 3px solid var(--accent);
         }
 
-        .timer-box {
-            text-align: center;
-        }
-
+        .timer-box { text-align: center; }
         .timer-display {
             font-size: 2.4rem;
             font-weight: 800;
@@ -98,17 +96,8 @@
             display: flex;
         }
 
-        .progress-team {
-            background: var(--accent);
-            height: 100%;
-            transition: width 0.4s ease;
-        }
-
-        .progress-opp {
-            background: var(--red);
-            height: 100%;
-            transition: width 0.4s ease;
-        }
+        .progress-team { background: var(--accent); height: 100%; transition: width 0.4s ease; }
+        .progress-opp { background: var(--red); height: 100%; transition: width 0.4s ease; }
 
         .possession-btns {
             display: grid;
@@ -124,6 +113,75 @@
             border: none;
             cursor: pointer;
             color: white;
+        }
+
+        /* DY FUSHAT E VOGLA TAKTIKE (HOME & AWAY) */
+        .pitches-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .pitches-container { grid-template-columns: 1fr; }
+        }
+
+        .mini-pitch {
+            background: radial-gradient(circle, #166534 0%, #052e16 100%);
+            border: 2px solid #22c55e;
+            border-radius: 10px;
+            padding: 12px;
+            position: relative;
+        }
+
+        .pitch-title {
+            text-align: center;
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .player-node {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .player-node:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .player-node.active-possession {
+            background: var(--gold) !important;
+            color: #000 !important;
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--gold);
+        }
+
+        .player-num {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .player-stats {
+            font-size: 0.7rem;
+            margin-top: 2px;
+            color: #cbd5e1;
         }
 
         /* STRUKTURA KRYESORE */
@@ -253,7 +311,7 @@
     <div class="header">
         <div>
             <h2 style="margin:0;">Pro Match Tagger</h2>
-            <small style="color:#9ca3af;">Platforma Profesionale e Analizës Taktike me Posedim Live</small>
+            <small style="color:#9ca3af;">Platforma Profesionale e Analizës Taktike me Posedim Live & Loja sipas Numrave</small>
         </div>
         <div class="timer-box">
             <span class="period-badge" id="periodDisplay">Pjesa 1</span>
@@ -270,18 +328,37 @@
     <!-- PANEL-I I POSEDIMIT TË TOPIT (POSSESSION TRACKER) -->
     <div class="possession-bar-container">
         <div class="possession-headers">
-            <div>Ekipi Ynë: <span id="ourPossPct">50%</span> (<span id="ourPossTime">00:00</span>)</div>
+            <div>Ekipi Shtëpisë: <span id="ourPossPct">50%</span> (<span id="ourPossTime">00:00</span>)</div>
             <div style="color:#9ca3af; font-size:0.9rem;">MBAJTJA E TOPIT LIVE</div>
-            <div>Kundërshtari: <span id="oppPossPct">50%</span> (<span id="oppPossTime">00:00</span>)</div>
+            <div>Ekipi Mik: <span id="oppPossPct">50%</span> (<span id="oppPossTime">00:00</span>)</div>
         </div>
         <div class="progress-bar-wrap">
             <div class="progress-team" id="ourBar" style="width: 50%;"></div>
             <div class="progress-opp" id="oppBar" style="width: 50%;"></div>
         </div>
         <div class="possession-btns">
-            <button class="pos-btn" style="background:var(--accent); color:#000;" onclick="setPossession('our')">Topi te Ekipi Ynë</button>
-            <button class="pos-btn" style="background:#4b5563;" onclick="setPossession('none')">Topi Jashtë / Ndërprerje</button>
-            <button class="pos-btn" style="background:var(--red);" onclick="setPossession('opp')">Topi te Kundërshtari</button>
+            <button class="pos-btn" style="background:var(--accent); color:#000;" onclick="setPossession('our', 'Ekipi Shtëpisë')">Topi te Ekipi Shtëpisë</button>
+            <button class="pos-btn" style="background:#4b5563;" onclick="setPossession('none', 'Ndërprerje')">Topi Jashtë / Ndërprerje</button>
+            <button class="pos-btn" style="background:var(--red);" onclick="setPossession('opp', 'Ekipi Mik')">Topi te Ekipi Mik</button>
+        </div>
+    </div>
+
+    <!-- DY FUSHAT E VOGLA TAKTIKE ME NUMRA LOJTARËSH -->
+    <div class="pitches-container">
+        <!-- FUSHA 1: EKIPI I SHTËPISË -->
+        <div class="mini-pitch">
+            <div class="pitch-title">🏠 Ekipi Shtëpisë (Klikoni Numrin)</div>
+            <div class="players-grid" id="homePlayersPitch">
+                <!-- Gjenerohet automatikisht me JS -->
+            </div>
+        </div>
+
+        <!-- FUSHA 2: EKIPI MIK -->
+        <div class="mini-pitch" style="border-color: var(--red);">
+            <div class="pitch-title" style="color: #fca5a5;">✈️ Ekipi Mik (Klikoni Numrin)</div>
+            <div class="players-grid" id="awayPlayersPitch">
+                <!-- Gjenerohet automatikisht me JS -->
+            </div>
         </div>
     </div>
 
@@ -292,8 +369,8 @@
             
             <div class="inputs-grid">
                 <div>
-                    <label>Lojtari (Emri/Nr):</label>
-                    <input type="text" id="playerInput" placeholder="P.sh. Nr. 10 / Ardit">
+                    <label>Lojtari i Zgjedhur:</label>
+                    <input type="text" id="playerInput" placeholder="P.sh. Nr. 10" value="Nr. 10">
                 </div>
                 <div>
                     <label>Zona e Fushës:</label>
@@ -404,12 +481,21 @@
     </div>
 
     <script>
+        // LISTA E NUMRAVE TË EKIPIVET
+        const homePlayerNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        const awayPlayerNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+        // MBROJTJA E KOHËS SIPAS LOJTARËVE (PERSONAL POSSESSION)
+        let playerPossessionSeconds = {}; // { 'Home-10': 45, 'Away-7': 20 }
+
         // TE DHËNAT E KRONOMETRIT & POSEDIMIT
         let seconds = 0;
         let timerInterval = null;
         let currentPeriod = 1;
 
         let currentPossession = 'none'; // 'our', 'opp', 'none'
+        let currentActivePlayerKey = null; // P.sh. 'Home-10'
+
         let ourPossSeconds = 0;
         let oppPossSeconds = 0;
 
@@ -422,15 +508,71 @@
         let duelsTotal = 0;
         let turnovers = 0;
 
+        // INICIALIZIMI I FUSHAVE TË VOGLA
+        function initMiniPitches() {
+            let homeContainer = document.getElementById('homePlayersPitch');
+            let awayContainer = document.getElementById('awayPlayersPitch');
+
+            homeContainer.innerHTML = "";
+            awayContainer.innerHTML = "";
+
+            homePlayerNumbers.forEach(num => {
+                let key = 'Home-' + num;
+                playerPossessionSeconds[key] = 0;
+                homeContainer.innerHTML += `
+                    <div class="player-node" id="node-${key}" onclick="selectPlayerPossession('home', ${num})">
+                        <div class="player-num">Nr. ${num}</div>
+                        <div class="player-stats" id="stat-${key}">0s (0%)</div>
+                    </div>
+                `;
+            });
+
+            awayPlayerNumbers.forEach(num => {
+                let key = 'Away-' + num;
+                playerPossessionSeconds[key] = 0;
+                awayContainer.innerHTML += `
+                    <div class="player-node" id="node-${key}" onclick="selectPlayerPossession('away', ${num})" style="border-color:#ef4444;">
+                        <div class="player-num" style="color:#fca5a5;">Nr. ${num}</div>
+                        <div class="player-stats" id="stat-${key}">0s (0%)</div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectPlayerPossession(team, num) {
+            let key = (team === 'home' ? 'Home-' : 'Away-') + num;
+            let playerLabel = (team === 'home' ? 'Shtëpia Nr. ' : 'Mik Nr. ') + num;
+
+            document.getElementById('playerInput').value = playerLabel;
+            currentActivePlayerKey = key;
+
+            // Vendos automatikisht edhe ekipin që ka posedimin
+            if (team === 'home') {
+                setPossession('our', playerLabel);
+            } else {
+                setPossession('opp', playerLabel);
+            }
+
+            // Highlighting vizual në fushë
+            document.querySelectorAll('.player-node').forEach(el => el.classList.remove('active-possession'));
+            let activeNode = document.getElementById('node-' + key);
+            if(activeNode) activeNode.classList.add('active-possession');
+        }
+
         function startTimer() {
             if (!timerInterval) {
                 timerInterval = setInterval(() => {
                     seconds++;
                     updateTimerDisplay();
 
-                    // Llogaritja e mbajtjes së topit sipas sekondave
+                    // Llogaritja e mbajtjes së topit sipas sekondave ekipore
                     if (currentPossession === 'our') ourPossSeconds++;
                     else if (currentPossession === 'opp') oppPossSeconds++;
+
+                    // Llogaritja e mbajtjes se topit sipas lojtarit individual
+                    if (currentActivePlayerKey && currentPossession !== 'none') {
+                        playerPossessionSeconds[currentActivePlayerKey] = (playerPossessionSeconds[currentActivePlayerKey] || 0) + 1;
+                    }
 
                     updatePossessionDisplay();
                 }, 1000);
@@ -454,8 +596,11 @@
                 ourPossSeconds = 0;
                 oppPossSeconds = 0;
                 currentPossession = 'none';
+                currentActivePlayerKey = null;
                 logs = [];
                 totalShots = 0; keyPasses = 0; duelsWon = 0; duelsTotal = 0; turnovers = 0;
+                
+                initMiniPitches();
                 updateTimerDisplay();
                 updatePossessionDisplay();
                 renderLogs();
@@ -470,8 +615,12 @@
                 (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
         }
 
-        function setPossession(team) {
+        function setPossession(team, label) {
             currentPossession = team;
+            if (team === 'none') {
+                currentActivePlayerKey = null;
+                document.querySelectorAll('.player-node').forEach(el => el.classList.remove('active-possession'));
+            }
         }
 
         function updatePossessionDisplay() {
@@ -492,6 +641,19 @@
 
             document.getElementById('ourPossTime').innerText = formatSecs(ourPossSeconds);
             document.getElementById('oppPossTime').innerText = formatSecs(oppPossSeconds);
+
+            // PËRDITËSIMI I PERQINDJEVE TË LOJTARËVE NË FUSHË
+            Object.keys(playerPossessionSeconds).forEach(key => {
+                let pSecs = playerPossessionSeconds[key];
+                let isHome = key.startsWith('Home');
+                let teamTotalSecs = isHome ? ourPossSeconds : oppPossSeconds;
+                let pPct = teamTotalSecs > 0 ? Math.round((pSecs / teamTotalSecs) * 100) : 0;
+
+                let statEl = document.getElementById('stat-' + key);
+                if (statEl) {
+                    statEl.innerText = `${pSecs}s (${pPct}%)`;
+                }
+            });
         }
 
         function formatSecs(sec) {
@@ -587,6 +749,7 @@
                     oppPossessionPercent: document.getElementById('oppPossPct').innerText,
                     totalEventsTagged: logs.length
                 },
+                playerPossessionStats: playerPossessionSeconds,
                 logs: logs
             };
 
@@ -596,6 +759,11 @@
             link.download = `Match_Analytics_${new Date().toISOString().slice(0,10)}.json`;
             link.click();
         }
+
+        // INITIALIZE ON LOAD
+        window.onload = function() {
+            initMiniPitches();
+        };
     </script>
 </body>
 </html>
